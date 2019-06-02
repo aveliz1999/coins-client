@@ -1,0 +1,44 @@
+.container {
+    height: 100%;
+    background: #56b0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-elements {
+    display: flex;
+    flex-direction: column;
+
+    //Small device
+    @media screen and (max-width: 767px) {
+        width: 320px;
+    }
+    //Medium device
+    @media screen and (min-width: 768px) {
+        width: 450px;
+    }
+    //Desktop
+    @media screen and (min-width: 992px) {
+        width: 500px;
+    }
+    //Large desktop
+    @media screen and (min-width: 1200px) {
+        width: 580px;
+    }
+
+    input {
+        padding: 5px 0 5px 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    button {
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+}
