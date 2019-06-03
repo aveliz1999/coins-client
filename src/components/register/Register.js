@@ -7,6 +7,12 @@ import MessageModal from "../modal/message/MessageModal";
 
 class Register extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.form = React.createRef();
+    }
+
     state = {
         email: '',
         name: '',
@@ -18,7 +24,7 @@ class Register extends React.Component {
     };
 
     render() {
-        return <form id='form' className="container">
+        return <form ref={this.form} className="container">
             <LoadingModal visible={this.state.loading} title='Registering'/>
             <MessageModal visible={this.state.registered} title='Registered'
                           message='Your account was successfully created. You can now go back and log in.'
@@ -80,12 +86,11 @@ class Register extends React.Component {
                     event.preventDefault();
 
                     // Check if the form fields meet the requirements and attempt to register if they do
-                    let form = document.getElementById('form');
-                    if (form.checkValidity()) {
+                    if (this.form.checkValidity()) {
                         this.register();
                     }
                     else{
-                        form.reportValidity();
+                        this.form.reportValidity();
                     }
                 }}>
                     Register

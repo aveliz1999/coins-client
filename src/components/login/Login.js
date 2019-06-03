@@ -7,6 +7,12 @@ import LoadingModal from "../modal/loading/LoadingModal";
 
 class Login extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.form = React.createRef();
+    }
+
     state = {
         email: '',
         password: '',
@@ -20,7 +26,7 @@ class Login extends React.Component {
         if (this.state.authenticated) {
             return <Redirect to='/' push/>
         }
-        return <form id='form' className="container">
+        return <form ref={this.form} className="container">
             <LoadingModal visible={this.state.loading} title='Logging In'/>
             <MessageModal visible={this.state.responseError} title='Error' message={this.state.responseError}
                           onConfirm={
@@ -44,11 +50,10 @@ class Login extends React.Component {
                         event.preventDefault();
 
                         // Check the email and password fields meet the requirements and attempt to log in if they do
-                        let form = document.getElementById('form');
-                        if (form.checkValidity()) {
+                        if (this.form.checkValidity()) {
                             this.login();
                         } else {
-                            form.reportValidity();
+                            this.form.reportValidity();
                         }
                     }}
                 >
