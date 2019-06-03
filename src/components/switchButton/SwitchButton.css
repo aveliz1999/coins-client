@@ -1,0 +1,29 @@
+.switch {
+    height: 36px;
+    transition: all .4s linear;
+    border: 0;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
+    outline: none;
+    cursor: pointer;
+}
+
+.switch-secondary {
+    transform: rotateY(180deg);
+}
+
+.switch-text {
+    transition: all .2s linear;
+    display: inline-block;
+}
+
+.switch-text-rotate {
+    transform: rotateY(90deg);
+}
+
+.switch-text-rotate-in {
+    transform: rotateY(180deg);
+}
+
+.switch-text-rotate-none {
+    transform: rotateY(0deg);
+}
