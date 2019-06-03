@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "../Modal";
 import styles from "./MessageModal.module.css";
+import PropTypes from 'prop-types';
 
 class MessageModal extends React.Component {
 
@@ -22,5 +23,29 @@ class MessageModal extends React.Component {
         </Modal>
     }
 }
+
+MessageModal.propTypes = {
+    /**
+     * If the modal is currently visible
+     */
+    visible: PropTypes.bool.isRequired,
+    /**
+     * The title to display with the message
+     */
+    title: PropTypes.string.isRequired,
+    /**
+     * Message to display
+     */
+    message: PropTypes.string.isRequired,
+    /**
+     * Function to call when the user clicks the confirm button
+     */
+    onConfirm: PropTypes.func.isRequired,
+    /**
+     * Text to display in the confirm button.
+     * Defaults to 'Ok'
+     */
+    confirmText: PropTypes.string
+};
 
 export default MessageModal;

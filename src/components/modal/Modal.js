@@ -1,5 +1,6 @@
 import React from "react";
 import './Modal.css';
+import PropTypes from 'prop-types';
 
 class Modal extends React.Component {
 
@@ -11,5 +12,12 @@ class Modal extends React.Component {
         </div> : null
     }
 }
+
+Modal.propTypes = {
+    /**
+     * If the modal is currently visible
+     */
+    visible: PropTypes.bool.isRequired
+};
 
 export default Modal;

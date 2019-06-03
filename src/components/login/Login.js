@@ -4,6 +4,7 @@ import axios from 'axios';
 import {Redirect, Link} from "react-router-dom";
 import MessageModal from "../modal/message/MessageModal";
 import LoadingModal from "../modal/loading/LoadingModal";
+import PropTypes from 'prop-types';
 
 class Login extends React.Component {
 
@@ -99,5 +100,12 @@ class Login extends React.Component {
         }
     }
 }
+
+Login.propTypes = {
+    /**
+     * Function to call when the user has successfully authenticated
+     */
+    authenticate: PropTypes.func.isRequired
+};
 
 export default Login;
