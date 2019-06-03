@@ -50,10 +50,10 @@ class Login extends React.Component {
                         event.preventDefault();
 
                         // Check the email and password fields meet the requirements and attempt to log in if they do
-                        if (this.form.checkValidity()) {
+                        if (this.form.current.checkValidity()) {
                             this.login();
                         } else {
-                            this.form.reportValidity();
+                            this.form.current.reportValidity();
                         }
                     }}
                 >

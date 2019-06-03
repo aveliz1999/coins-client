@@ -86,11 +86,11 @@ class Register extends React.Component {
                     event.preventDefault();
 
                     // Check if the form fields meet the requirements and attempt to register if they do
-                    if (this.form.checkValidity()) {
+                    if (this.form.current.checkValidity()) {
                         this.register();
                     }
                     else{
-                        this.form.reportValidity();
+                        this.form.current.reportValidity();
                     }
                 }}>
                     Register
