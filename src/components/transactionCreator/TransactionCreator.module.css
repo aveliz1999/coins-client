@@ -1,0 +1,57 @@
+.container {
+    background-color: #ffffff;
+    border: 1px solid #cacaca;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+}
+
+.top{
+    margin-top: 0;
+}
+
+.top > div {
+    width: 100%;
+}
+
+.inputPrefix {
+    width: 64px;
+    height: 34px;
+    padding-left: 5px;
+    outline: none;
+    border: 1px solid #9e9e9e;
+    border-right: 0;
+}
+
+.amount {
+    height: 34px;
+    width: 100%;
+    outline: none;
+    border: 1px solid #9e9e9e;
+    border-radius: 0;
+    border-left: 0;
+}
+
+.message {
+    width: 100%;
+}
+
+.bottom {
+    justify-content: flex-end;
+}
+
+.submit {
+    height: 36px;
+    width: 75px;
+    transition: all .4s linear;
+    border: 0;
+    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.25);
+    outline: none;
+    cursor: pointer;
+    background-color: #86d993;
+}

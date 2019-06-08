@@ -1,0 +1,24 @@
+.option {
+    height: 32px;
+    display: flex;
+    align-items: center;
+    color: black;
+    padding: 8px 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: #9e9e9e;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.thumbnail {
+    width: 32px;
+    height: 32px;
+}

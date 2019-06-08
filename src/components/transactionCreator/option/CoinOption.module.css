@@ -1,0 +1,18 @@
+.option {
+    display: flex;
+    flex-direction: row;
+    color: black;
+    padding: 8px 10px;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+}
+
+.thumbnail {
+    width: 32px;
+    height: 32px;
+}
+
