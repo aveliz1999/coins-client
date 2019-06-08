@@ -7,7 +7,11 @@ html, body, #root {
   width: 100%
 }
 
-p, input, span, div, button {
+p, input, span, div, button, textarea {
   font-family: 'Roboto', sans-serif;
   font-size: 12pt;
+}
+
+::-moz-focus-inner {
+  border: none;
 }
