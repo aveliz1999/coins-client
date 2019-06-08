@@ -20,6 +20,13 @@ class SwitchButton extends React.Component {
         secondaryColor: this.props.secondaryColor || '#FF3A19'
     };
 
+    componentDidMount() {
+        if(!this.state.value) {
+            this.textSpan.current.classList.add('switch-text-rotate-in');
+            this.setState({textValue: this.props.secondaryText || this.props.text})
+        }
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         // If the value prop changed, update the local state value
         if(prevProps.value !== this.props.value) {
