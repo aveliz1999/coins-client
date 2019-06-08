@@ -1,13 +1,13 @@
 import React from "react";
-import style from './CoinOption.module.css';
+import styles from './CoinOption.module.css';
 import PropTypes from 'prop-types';
 
 class CoinOption extends React.Component {
 
     render() {
-        return <div ref={this.props.innerRef} className={style.option} {...this.props.innerProps}>
-            <img className={style.thumbnail} src={'/media/users/' + this.props.data.uuid + '/thumbnail.jpg'}/>
-            <div className={style.information}>
+        return <div ref={this.props.innerRef} className={styles.option} {...this.props.innerProps}>
+            <img className={styles.thumbnail} src={'/media/users/' + this.props.data.uuid + '/thumbnail.jpg'}/>
+            <div className={styles.information}>
                 <span>{this.props.data.name}</span>
                 <span>{this.props.data.symbol + (this.props.data.amount / 100)}</span>
             </div>

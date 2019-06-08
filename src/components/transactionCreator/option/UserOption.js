@@ -1,13 +1,13 @@
 import React from "react";
-import style from './UserOption.module.css';
+import styles from './UserOption.module.css';
 import PropTypes from 'prop-types';
 
 class UserOption extends React.Component {
 
     render() {
-        return <div ref={this.props.innerRef} className={style.option} {...this.props.innerProps}>
-            <img className={style.thumbnail} src={'/media/users/' + this.props.data.uuid + '/thumbnail.jpg'}/>
-            <div className={style.information}>
+        return <div ref={this.props.innerRef} className={styles.option} {...this.props.innerProps}>
+            <img className={styles.thumbnail} src={'/media/users/' + this.props.data.uuid + '/thumbnail.jpg'}/>
+            <div className={styles.information}>
                 <span>{this.props.data.name}</span>
                 <span>{this.props.data.email}</span>
             </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import './Register.scss';
+import styles from './Register.module.scss';
 import {Link} from "react-router-dom";
 import axios from "axios";
 import LoadingModal from "../modal/loading/LoadingModal";
@@ -24,7 +24,7 @@ class Register extends React.Component {
     };
 
     render() {
-        return <form ref={this.form} className="container">
+        return <form ref={this.form} className={styles.container}>
             <LoadingModal visible={this.state.loading} title='Registering'/>
             <MessageModal visible={this.state.registered} title='Registered'
                           message='Your account was successfully created. You can now go back and log in.'
@@ -38,7 +38,7 @@ class Register extends React.Component {
                           }
             />
 
-            <div className='register-elements'>
+            <div className={styles.registerElements}>
                 <input type="email" required placeholder="Email" value={this.state.email}
                        onChange={
                            event => this.setState({email: event.target.value})
@@ -96,7 +96,7 @@ class Register extends React.Component {
                     Register
                 </button>
                 <Link to='/login'>
-                    <button className='fill-width'>
+                    <button className={styles.loginButton}>
                         Back
                     </button>
                 </Link>

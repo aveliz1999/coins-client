@@ -1,5 +1,5 @@
 import React from "react";
-import './Login.scss'
+import styles from './Login.module.scss'
 import axios from 'axios';
 import {Redirect, Link} from "react-router-dom";
 import MessageModal from "../modal/message/MessageModal";
@@ -27,14 +27,14 @@ class Login extends React.Component {
         if (this.state.authenticated) {
             return <Redirect to='/' push/>
         }
-        return <form ref={this.form} className="container">
+        return <form ref={this.form} className={styles.container}>
             <LoadingModal visible={this.state.loading} title='Logging In'/>
             <MessageModal visible={this.state.responseError} title='Error' message={this.state.responseError}
                           onConfirm={
                               () => this.setState({responseError: undefined})
                           }
             />
-            <div className='login-elements'>
+            <div className={styles.loginElements}>
                 <input type="email" required placeholder="Email" value={this.state.email}
                        onChange={
                            event => this.setState({email: event.target.value})
@@ -61,7 +61,7 @@ class Login extends React.Component {
                     Log In
                 </button>
                 <Link to='/register'>
-                    <button className='fill-width'>
+                    <button className={styles.registerButton}>
                         Register
                     </button>
                 </Link>

@@ -3,7 +3,7 @@ import SwitchButton from "../switchButton/SwitchButton";
 import Select from "react-select";
 import UserOption from "./option/UserOption";
 import axios from 'axios';
-import style from './TransactionCreator.module.css';
+import styles from './TransactionCreator.module.css';
 import CoinOption from "./option/CoinOption";
 import MessageModal from "../modal/message/MessageModal";
 import PropTypes from 'prop-types';
@@ -28,20 +28,20 @@ class TransactionCreator extends React.Component {
     };
 
     render() {
-        return <div className={style.container}>
+        return <div className={styles.container}>
             <MessageModal visible={this.state.error}
                           title='Error'
                           message={this.state.error}
                           onConfirm={() => this.setState({error: undefined})}
             />
-            <div className={[style.row, style.top].join(' ')}>
+            <div className={[styles.row, styles.top].join(' ')}>
                 <SwitchButton toggleable={true} width={75} value={this.state.chargeValue} text='Charge'
                               secondaryText='Pay'
                               toggle={() => {
                                   this.setState((previousState) => {return {chargeValue: !previousState.chargeValue}})
                               }}
                 />
-                <input readOnly className={style.inputPrefix} style={{width: 64}} value='Receiver:'/>
+                <input readOnly className={styles.inputPrefix} style={{width: 64}} value='Receiver:'/>
                 <Select isClearable={true}
                         components={{Option: UserOption}}
                         onInputChange={(value) => {
@@ -66,9 +66,9 @@ class TransactionCreator extends React.Component {
             </div>
             { this.state.selectedUser ?
                 <>
-                    <div className={style.row}>
-                        <input readOnly className={style.inputPrefix} value='Amount:'/>
-                        <input className={style.amount}
+                    <div className={styles.row}>
+                        <input readOnly className={styles.inputPrefix} value='Amount:'/>
+                        <input className={styles.amount}
                                value={this.state.amount}
                                onChange={event => this.updateAmount(event.target.value)}
                         />
@@ -86,15 +86,15 @@ class TransactionCreator extends React.Component {
                                 onChange={selected => this.setState({'selectedCoin': selected})}
                         />
                     </div>
-                    <div className={style.row}>
-                        <textarea className={style.message}
+                    <div className={styles.row}>
+                        <textarea className={styles.message}
                                   placeholder='Message'
                                   value={this.state.message}
                                   onChange={event => this.setState({'message': event.target.value})}
                         />
                     </div>
-                    <div className={[style.row, style.bottom].join(' ')}>
-                        <button className={style.submit}
+                    <div className={[styles.row, styles.bottom].join(' ')}>
+                        <button className={styles.submit}
                                 onClick={this.submit}
                         >
                             Send

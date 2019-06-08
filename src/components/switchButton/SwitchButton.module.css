@@ -7,23 +7,23 @@
     cursor: pointer;
 }
 
-.switch-secondary {
+.switchSecondary {
     transform: rotateY(180deg);
 }
 
-.switch-text {
+.switchText {
     transition: all .2s linear;
     display: inline-block;
 }
 
-.switch-text-rotate {
+.switchTextRotate {
     transform: rotateY(90deg);
 }
 
-.switch-text-rotate-in {
+.switchTextRotateIn {
     transform: rotateY(180deg);
 }
 
-.switch-text-rotate-none {
+.switchTextRotateNone {
     transform: rotateY(0deg);
 }

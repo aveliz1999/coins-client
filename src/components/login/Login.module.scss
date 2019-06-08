@@ -6,7 +6,11 @@
     align-items: center;
 }
 
-.register-elements {
+.registerButton {
+    width: 100%;
+}
+
+.loginElements {
     display: flex;
     flex-direction: column;
 
@@ -30,7 +34,7 @@
     input {
         padding: 5px 0 5px 5px;
         border: 1px solid #ccc;
-        border-radius: 4px;
+        border-radius: 5px;
         margin-top: 5px;
     }
 

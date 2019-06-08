@@ -1,5 +1,5 @@
 import React from "react";
-import './SwitchButton.css';
+import styles from './SwitchButton.module.css';
 import PropTypes from 'prop-types';
 
 class SwitchButton extends React.Component {
@@ -39,10 +39,10 @@ class SwitchButton extends React.Component {
             backgroundColor: this.state.value ? this.state.primaryColor : this.state.secondaryColor
         };
 
-        return <button className={'switch ' + (this.state.value ? '' : 'switch-secondary')}
+        return <button className={[styles.switch, this.state.value ? '' : styles.switchSecondary].join(' ')}
                        style={backgroundStyle}
                        onClick={() => this.toggle(true)}>
-            <span ref={this.textSpan} className={'switch-text'}
+            <span ref={this.textSpan} className={styles.switchText}
                   style={{width: this.props.width || '4em'}}
                   onTransitionEnd={this.toggleAnimation}>
                 {this.state.textValue}
@@ -60,27 +60,27 @@ class SwitchButton extends React.Component {
             this.setState((previousState) => {
                 return {value: !previousState.value}
             }, () => {
-                this.textSpan.current.classList.remove('switch-text-rotate-none');
-                this.textSpan.current.classList.remove('switch-text-rotate-in');
-                this.textSpan.current.classList.add('switch-text-rotate');
+                this.textSpan.current.classList.remove(styles.switchTextRotateNone);
+                this.textSpan.current.classList.remove(styles.switchTextRotateIn);
+                this.textSpan.current.classList.add(styles.switchTextRotate);
             });
         }
     }
 
     toggleAnimation() {
         // If the span contains the class, the transition was a rotate 90deg transition and the value/rotation must be changed
-        if (this.textSpan.current.classList.contains('switch-text-rotate')) {
+        if (this.textSpan.current.classList.contains(styles.switchTextRotate)) {
             // Remove the 90deg rotation
-            this.textSpan.current.classList.remove('switch-text-rotate');
+            this.textSpan.current.classList.remove(styles.switchTextRotate);
             if (this.state.value) {
                 // If the button value is positive set the button text to the primary and set rotation to 0deg
                 this.setState({textValue: this.props.text}, () => {
-                    this.textSpan.current.classList.add('switch-text-rotate-none');
+                    this.textSpan.current.classList.add(styles.switchTextRotateNone);
                 });
             } else {
                 // If the button value is negative set the button text to the secondary and set rotation to 180deg to match the button
                 this.setState({textValue: this.props.secondaryText || this.props.text}, () => {
-                    this.textSpan.current.classList.add('switch-text-rotate-in');
+                    this.textSpan.current.classList.add(styles.switchTextRotateIn);
                 });
             }
         }

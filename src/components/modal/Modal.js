@@ -1,12 +1,12 @@
 import React from "react";
-import './Modal.css';
+import styles from './Modal.module.css';
 import PropTypes from 'prop-types';
 
 class Modal extends React.Component {
 
     render() {
-        return this.props.visible ? <div className='overlay'>
-            <div className='modal'>
+        return this.props.visible ? <div className={styles.overlay}>
+            <div className={styles.modal}>
                 {this.props.children}
             </div>
         </div> : null
