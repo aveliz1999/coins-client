@@ -19,7 +19,7 @@ LoadingModal.propTypes = {
     /**
      * If the modal is currently visible
      */
-    visible: PropTypes.bool.isRequired,
+    visible: PropTypes.bool,
     /**
      * The title to display with the loading spinner
      */

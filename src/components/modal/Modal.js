@@ -17,7 +17,7 @@ Modal.propTypes = {
     /**
      * If the modal is currently visible
      */
-    visible: PropTypes.bool.isRequired
+    visible: PropTypes.bool
 };
 
 export default Modal;
