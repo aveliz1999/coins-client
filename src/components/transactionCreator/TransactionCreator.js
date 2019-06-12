@@ -145,7 +145,7 @@ class TransactionCreator extends React.Component {
             this.props.submit({
                 chargeValue: this.state.chargeValue,
                 receiver: this.state.selectedUser,
-                amount: this.state.amount,
+                amount: Math.round(parseFloat(this.state.amount) * 100),
                 coin: this.state.selectedCoin,
                 message: this.state.message
             });
