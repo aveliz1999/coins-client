@@ -5,6 +5,7 @@ import Login from "./components/login/Login";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Cookies from 'universal-cookie';
 import Register from "./components/register/Register";
+import Home from "./components/home/Home";
 
 const cookies = new Cookies();
 
@@ -25,7 +26,7 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/login" render={() => <Login authenticate={this.authenticate} />}/>
                     <Route exact path='/register' component={Register}/>
-                    <PrivateRoute exact path="/" authenticated={this.state.authenticated} redirect={'/login'}/>
+                    <PrivateRoute exact path="/" component={Home} authenticated={this.state.authenticated} redirect={'/login'}/>
                     <Route path='/'>
                         <Redirect to='/'/>
                     </Route>
@@ -37,7 +38,7 @@ class App extends React.Component {
     authenticate() {
         this.setState({
             authenticated: cookies.get('authenticated')
-        })
+        });
     }
 }
 
