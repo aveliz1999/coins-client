@@ -1,71 +1,80 @@
 import React from "react";
 import styles from './TransactionList.module.css'
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import Transaction from "./transaction/Transaction";
 import {ClipLoader} from "react-spinners";
 
 class TransactionList extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.updateTransactions = this.updateTransactions.bind(this);
-    }
-
-
-    state = {
-        transactions: [],
-        lastTransactionId: Number.MAX_SAFE_INTEGER,
-        loading: false
-    };
-
-
-    componentDidMount() {
-        this.updateTransactions();
-    }
-
     render() {
         return <div className={styles.container}>
             {
-                this.state.transactions.length ? this.state.transactions.map(transaction => {
+                this.props.transactions.length ? this.props.transactions.map(transaction => {
                     return <Transaction transaction={transaction} />
-                }) : <p className={styles.emptyMessage}>
-                    No transactions yet.
-                </p>
+                }) : (
+                    !this.props.loading && <p className={styles.emptyMessage}>
+                        No transactions yet.
+                    </p>
+                )
             }
             {
-                (this.state.lastTransactionId !== 0 && !this.state.loading) &&
+                (this.props.moreAvailable && !this.props.loading) &&
                 <button className={styles.loadMore}
-                        onClick={this.updateTransactions}
+                        onClick={this.props.updateTransactions}
                 >Load More</button>
             }
             {
-                this.state.loading &&
+                this.props.loading &&
                 <div className={styles.spinner}>
                     <ClipLoader/>
                 </div>
             }
         </div>
     }
-
-    async updateTransactions() {
-        try{
-            this.setState({loading: true});
-            const {transactions, lastId} = (await axios.get('/api/transactions/search/' + this.state.lastTransactionId)).data;
-            this.setState((previousState) => ({
-                lastTransactionId: transactions.length === 10 ? lastId : 0,
-                transactions: [...previousState.transactions, ...transactions]
-            }));
-        }
-        catch(e) {
-
-        }
-        this.setState({loading: false});
-    }
 }
 
 TransactionList.propTypes = {
+    /**
+     * List of transactions to display
+     */
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+        /**
+         * Amount that was transferred
+         */
+        amount: PropTypes.number.isRequired,
+        /**
+         * Timestamp of when the transaction occurred
+         */
+        timestamp: PropTypes.string.isRequired,
+        /**
+         * Message sent with the transaction
+         */
+        message: PropTypes.string.isRequired,
+        /**
+         * If the transaction saw sent or received by the user
+         */
+        sent: PropTypes.bool.isRequired,
+        /**
+         * User who sent/received the transaction
+         */
+        user: PropTypes.shape({
+            /**
+             * User's email
+             */
+            email: PropTypes.string.isRequired,
+            /**
+             * User's name
+             */
+            name: PropTypes.string.isRequired,
+            /**
+             * User's UUID
+             */
+            uuid: PropTypes.string.isRequired
+        }).isRequired
+    })).isRequired,
+    updateTransactions: PropTypes.func.isRequired,
+    moreAvailable: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired
 };
 
 export default TransactionList;
