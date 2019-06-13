@@ -8,43 +8,32 @@
 }
 
 .transactionsPanel {
-  //Small device
-  @media screen and (max-width: 1023px) {
-    width: 100%;
-  }
-  //Medium device
-  @media screen and (min-width: 1024px) {
-    width: 640px;
-  }
-  //Large device
-  @media screen and (min-width: 1440px) {
-    width: 900px;
-  }
-  //4k desktop
-  @media screen and (min-width: 1920px) {
-    width: 1280px;
-  }
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.transactionsRequestsList {
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  margin-top: 10px;
+  border: 1px solid #cacaca;
+  flex-grow: 1;
+}
+
+.transactionsRequestsList > div {
+  flex-grow: 1;
 }
 
 .informationPanel {
-  //Medium device
-  @media screen and (min-width: 1024px) {
-    width: 320px;
-  }
-  //Large device
-  @media screen and (min-width: 1440px) {
-    width: 512px;
-  }
-  //4k desktop
-  @media screen and (min-width: 1920px) {
-    width: 640px;
-  }
-
-  background-color: #ffffff;
+  width: 320px;
+  margin: 10px 10px 10px 0;
   border: 1px solid #cacaca;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 25px;
+  background-color: #ffffff;
 }
 
 .userInformation {
