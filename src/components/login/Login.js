@@ -29,7 +29,7 @@ class Login extends React.Component {
         }
         return <form ref={this.form} className={styles.container}>
             <LoadingModal visible={this.state.loading} title='Logging In'/>
-            <MessageModal visible={this.state.responseError} title='Error' message={this.state.responseError}
+            <MessageModal visible={this.state.responseError || false} title='Error' message={this.state.responseError}
                           onConfirm={
                               () => this.setState({responseError: undefined})
                           }
@@ -93,9 +93,9 @@ class Login extends React.Component {
             const response = err.response;
             const code = response.status;
             if (code === 500) {
-                this.state.responseError = 'Incorrect email or password. Please try again.';
+                this.setState({responseError: 'Incorrect email or password. Please try again.'});
             } else {
-                this.state.responseError = 'An error has occurred while logging in. Please try again.';
+                this.setState({responseError: 'An error has occurred while logging in. Please try again.'});
             }
         }
     }
