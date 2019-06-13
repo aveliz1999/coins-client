@@ -31,6 +31,9 @@ class Transaction extends React.Component {
                             this.formatTime(this.props.transaction.timestamp)
                         }
                     </span>
+                    <span>
+                        {this.props.transaction.message}
+                    </span>
                 </div>
             </div>
             <hr className={styles.separator}/>
