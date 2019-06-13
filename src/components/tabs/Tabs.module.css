@@ -1,0 +1,26 @@
+.tabs {
+    display: flex;
+}
+
+.tab {
+    background: #2195f4;
+    flex-grow: 1;
+    text-align: center;
+    height: 30px;
+    font-size: 14pt;
+    color: white;
+    border-top: 3px solid #2195f4;
+}
+
+.tab:hover:not(.active) {
+    border-bottom: 3px solid rgb(134, 217, 147);
+    cursor: pointer;
+}
+
+.active {
+    border-bottom: 3px solid rgb(134, 217, 147);
+}
+
+.tab:not(.active) {
+    border-bottom: 3px solid #2195f4;
+}
