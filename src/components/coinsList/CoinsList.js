@@ -9,7 +9,7 @@ class CoinsList extends React.Component {
             {
                 this.props.coins.map(coin => {
                     return <>
-                        <div className={styles.coin}>
+                        <div key={coin.uuid} className={styles.coin}>
                             <img className={styles.thumbnail} src={'/media/coins/' + coin.uuid + '/thumbnail.jpg'}/>
                             <div className={styles.coinInformation}>
                                 <span>{coin.name}</span>
