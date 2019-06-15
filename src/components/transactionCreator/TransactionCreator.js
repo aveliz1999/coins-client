@@ -108,7 +108,7 @@ class TransactionCreator extends React.Component {
     async updateAutocomplete(name) {
         try{
             const result = (await axios.get('/api/users/search/' + name)).data;
-            const labeled = result.map(user => { return {...user, label: user.name}});
+            const labeled = result.map(user => { return {...user, label: user.name, value: user.email}});
             this.setState({autocompleteUsers: labeled});
         }
         catch(e) {
