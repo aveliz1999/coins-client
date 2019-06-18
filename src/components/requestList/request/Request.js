@@ -29,7 +29,7 @@ class Request extends React.Component {
                     </span>
                     <span>
                         {
-                            this.props.request.message + 'Hello there@'
+                            this.props.request.message
                         }
                     </span>
                     <div className={styles.actions}>

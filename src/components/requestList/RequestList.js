@@ -16,7 +16,7 @@ class RequestList extends React.Component {
             {
                 (this.props.moreAvailable && !this.props.loading) &&
                 <button className={styles.loadMore}
-                        onClick={this.props.updateRequests}
+                        onClick={() => this.props.updateRequests()}
                 >Load More</button>
             }
             {

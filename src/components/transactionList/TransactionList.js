@@ -20,7 +20,7 @@ class TransactionList extends React.Component {
             {
                 (this.props.moreAvailable && !this.props.loading) &&
                 <button className={styles.loadMore}
-                        onClick={this.props.updateTransactions}
+                        onClick={() => this.props.updateTransactions()}
                 >Load More</button>
             }
             {
