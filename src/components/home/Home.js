@@ -27,11 +27,11 @@ class Home extends React.Component {
         coins: [],
         creatingTransaction: false,
         transactions: [],
-        lastTransactionId: Number.MAX_SAFE_INTEGER,
         loadingTransactions: false,
+        transactionsAvailable: true,
         requests: [],
-        lastRequestId: Number.MAX_SAFE_INTEGER,
-        loadingRequests: false
+        loadingRequests: false,
+        requestsAvailable: true
     };
 
     componentDidMount() {
@@ -50,13 +50,13 @@ class Home extends React.Component {
                  <div className={styles.transactionsRequestsList}>
                      <Tabs tabs={['Transactions', 'Requests']}>
                          <TransactionList transactions={this.state.transactions}
-                                          updateTransactions={this.updateTransactions}
-                                          moreAvailable={this.state.lastTransactionId > 0}
+                                          updateTransactions={this.loadTransactions}
+                                          moreAvailable={this.state.transactionsAvailable}
                                           loading={this.state.loadingTransactions}
                          />
                          <RequestList transactions={this.state.requests}
-                                      updateRequests={this.updateRequests}
-                                      moreAvailable={this.state.lastRequestId > 0}
+                                      updateRequests={this.loadRequests}
+                                      moreAvailable={this.state.requestsAvailable}
                                       loading={this.state.loadingRequests}
                          />
                      </Tabs>
@@ -114,13 +114,24 @@ class Home extends React.Component {
     /**
      * Load more transactions, starting at the lastTransactionId variable in state
      */
-    async loadTransactions() {
+    async loadTransactions(uuid = undefined) {
         try{
             this.setState({loadingTransactions: true});
-            const {transactions, lastId} = (await axios.get('/api/transactions/search/' + this.state.lastTransactionId)).data;
+
+            if(!uuid) {
+                uuid = (this.state.transactions[this.state.transactions.length - 1] || {}).uuid || '';
+            }
+            let existing = this.state.transactions.map(transaction => transaction.uuid);
+
+            let {transactions, moreAvailable} = (await axios.get('/api/transactions/search/' + uuid)).data;
+            transactions = transactions.filter(transaction => {
+                return !existing.includes(transaction.uuid);
+            });
             this.setState((previousState) => ({
-                lastTransactionId: transactions.length === 10 ? lastId : 0,
-                transactions: [...previousState.transactions, ...transactions]
+                transactions: [...previousState.transactions, ...transactions].sort((first, second) => {
+                    return Date.parse(first) - Date.parse(second);
+                }),
+                transactionsAvailable: moreAvailable
             }));
         }
         catch(e) {
@@ -130,15 +141,26 @@ class Home extends React.Component {
     }
 
     /**
-     * Load more requests, starting at the lastRequestId variable in state
+     * Load more transactions, starting at the lastTransactionId variable in state
      */
-    async loadRequests() {
+    async loadRequests(uuid = undefined) {
         try{
             this.setState({loadingRequests: true});
-            const {requests, lastId} = (await axios.get('/api/transactions/search/requests/' + this.state.lastRequestId)).data;
+
+            if(!uuid) {
+                uuid = (this.state.requests[this.state.requests.length - 1] || {}).uuid || ''
+            }
+            let existing = this.state.requests.map(request => request.uuid);
+
+            let {requests, moreAvailable} = (await axios.get('/api/transactions/search/requests/' + uuid)).data;
+            requests = requests.filter(request => {
+                return !existing.includes(request.uuid);
+            });
             this.setState((previousState) => ({
-                lastRequestId: requests.length === 10 ? lastId : 0,
-                requests: [...previousState.requests, ...requests]
+                requests: [...previousState.requests, ...requests].sort((first, second) => {
+                    return Date.parse(first) - Date.parse(second);
+                }),
+                requestsAvailable: moreAvailable
             }));
         }
         catch(e) {
@@ -170,12 +192,16 @@ class Home extends React.Component {
                 message,
                 charging
             });
-            await this.updateCoins()
         }
         catch(e) {
             this.setState({error: 'An error occurred while creating your transaction.'})
         }
         this.setState({creatingTransaction: false});
+
+        this.updateCoins();
+        if(!charging) {
+            this.loadTransactions();
+        }
     }
 }
 
