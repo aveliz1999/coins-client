@@ -33,8 +33,14 @@ class Request extends React.Component {
                         }
                     </span>
                     <div className={styles.actions}>
-                        <button className={styles.accept}>Accept</button>
-                        <button className={styles.decline}>Decline</button>
+                        <button className={styles.accept}
+                                onClick={() => this.props.acceptDeclineCallback(this.props.request, true)}>
+                            Accept
+                        </button>
+                        <button className={styles.decline}
+                                onClick={() => this.props.acceptDeclineCallback(this.props.request, false)}>
+                            Decline
+                        </button>
                     </div>
                 </div>
             </div>
@@ -109,7 +115,12 @@ Request.propTypes = {
              */
             uuid: PropTypes.string.isRequired
         }).isRequired
-    }).isRequired
+    }).isRequired,
+    /**
+     * Callback function to call when the accept or decline buttons are pressed.
+     * Called with the request, and with true for accept and false for decline.
+     */
+    acceptDeclineCallback: PropTypes.func.isRequired
 };
 
 export default Request;

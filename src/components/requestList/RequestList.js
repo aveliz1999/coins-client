@@ -9,8 +9,10 @@ class RequestList extends React.Component {
     render() {
         return <div className={styles.container}>
             {
-                this.props.transactions.length > 0 && this.props.transactions.map(transaction => {
-                    return <Request request={transaction} />
+                this.props.requests.length > 0 && this.props.requests.map(transaction => {
+                    return <Request request={transaction}
+                                    acceptDeclineCallback={this.props.acceptDeclineRequestCallback}
+                    />
                 })
             }
             {
@@ -92,7 +94,12 @@ RequestList.propTypes = {
     /**
      * Requests are currently being retrieved
      */
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
+    /**
+     * Callback function to call when the accept or decline buttons on a request are pressed.
+     * Called with the request, and with true for accept and false for decline.
+     */
+    acceptDeclineRequestCallback: PropTypes.func.isRequired
 };
 
 export default RequestList;
