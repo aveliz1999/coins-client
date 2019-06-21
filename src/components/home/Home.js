@@ -9,6 +9,7 @@ import MessageModal from "../modal/message/MessageModal";
 import LoadingModal from "../modal/loading/LoadingModal";
 import RequestList from "../requestList/RequestList";
 import Tabs from "../tabs/Tabs";
+import ConfirmModal from "../modal/confirm/ConfirmModal";
 
 class Home extends React.Component {
 
@@ -20,6 +21,7 @@ class Home extends React.Component {
         this.loadTransactions = this.loadTransactions.bind(this);
         this.loadRequests = this.loadRequests.bind(this);
         this.createTransaction = this.createTransaction.bind(this);
+        this.acceptDeclineRequest = this.acceptDeclineRequest.bind(this);
     }
 
     state = {
@@ -31,7 +33,10 @@ class Home extends React.Component {
         transactionsAvailable: true,
         requests: [],
         loadingRequests: false,
-        requestsAvailable: true
+        requestsAvailable: true,
+        workingRequest: undefined,
+        showConfirmAcceptRequest: false,
+        showConfirmDeclineRequest: false
     };
 
     componentDidMount() {
@@ -54,10 +59,16 @@ class Home extends React.Component {
                                           moreAvailable={this.state.transactionsAvailable}
                                           loading={this.state.loadingTransactions}
                          />
-                         <RequestList transactions={this.state.requests}
+                         <RequestList requests={this.state.requests}
                                       updateRequests={this.loadRequests}
                                       moreAvailable={this.state.requestsAvailable}
                                       loading={this.state.loadingRequests}
+                                      acceptDeclineRequestCallback={(request, status) => {
+                                          this.setState({
+                                              workingRequest: request,
+                                              [status ? 'showConfirmAcceptRequest' : 'showConfirmDeclineRequest']: true
+                                          });
+                                      }}
                          />
                      </Tabs>
                  </div>
@@ -82,6 +93,28 @@ class Home extends React.Component {
                           visible={this.state.error}
             />
             <LoadingModal title={'Creating Transaction'} visible={this.state.creatingTransaction}/>
+            <ConfirmModal title={'Confirm Action'}
+                          message={this.state.workingRequest && `Do you want to send ${this.state.workingRequest.user.name} 
+                          ${this.state.workingRequest.coin.symbol} ${this.state.workingRequest.amount} for 
+                          "${this.state.workingRequest.message}"?`}
+                          onConfirm={() => this.acceptDeclineRequest(true)}
+                          onDecline={() => this.setState({
+                              workingRequest: undefined,
+                              showConfirmAcceptRequest: false,
+                              showConfirmDeclineRequest: false
+                          })}
+                          visible={this.state.showConfirmAcceptRequest}
+            />
+            <ConfirmModal title={'Confirm Action'}
+                          message={"Do you want to remove this request?"}
+                          onConfirm={() => this.acceptDeclineRequest(false)}
+                          onDecline={() => this.setState({
+                              workingRequest: undefined,
+                              showConfirmAcceptRequest: false,
+                              showConfirmDeclineRequest: false
+                          })}
+                          visible={this.state.showConfirmDeclineRequest}
+            />
         </div>
     }
 
@@ -118,7 +151,7 @@ class Home extends React.Component {
         try{
             this.setState({loadingTransactions: true});
 
-            if(!uuid) {
+            if(!uuid && typeof(uuid) !== 'string') {
                 uuid = (this.state.transactions[this.state.transactions.length - 1] || {}).uuid || '';
             }
             let existing = this.state.transactions.map(transaction => transaction.uuid);
@@ -129,7 +162,7 @@ class Home extends React.Component {
             });
             this.setState((previousState) => ({
                 transactions: [...previousState.transactions, ...transactions].sort((first, second) => {
-                    return Date.parse(first) - Date.parse(second);
+                    return Date.parse(second.timestamp) - Date.parse(first.timestamp);
                 }),
                 transactionsAvailable: moreAvailable
             }));
@@ -147,7 +180,7 @@ class Home extends React.Component {
         try{
             this.setState({loadingRequests: true});
 
-            if(!uuid) {
+            if(!uuid && typeof(uuid) !== 'string') {
                 uuid = (this.state.requests[this.state.requests.length - 1] || {}).uuid || ''
             }
             let existing = this.state.requests.map(request => request.uuid);
@@ -158,7 +191,7 @@ class Home extends React.Component {
             });
             this.setState((previousState) => ({
                 requests: [...previousState.requests, ...requests].sort((first, second) => {
-                    return Date.parse(first) - Date.parse(second);
+                    return Date.parse(second.timestamp) - Date.parse(first.timestamp);
                 }),
                 requestsAvailable: moreAvailable
             }));
@@ -202,6 +235,34 @@ class Home extends React.Component {
         if(!charging) {
             this.loadTransactions();
         }
+    }
+
+    /**
+     * Accept or decline a request
+     *
+     * @param status Whether to accept or decline the working request
+     */
+    async acceptDeclineRequest(status) {
+        const request = this.state.workingRequest;
+        this.setState({
+            workingRequest: undefined,
+            showConfirmAcceptRequest: false,
+            showConfirmDeclineRequest: false
+        });
+
+        let url = '/api/transactions/' + (status ? 'acceptRequest' : 'declineRequest');
+
+        await axios.post(url, {
+            requestId: request.uuid
+        });
+
+        this.updateCoins();
+        this.loadTransactions('');
+        this.setState(previousState => {
+            return {
+                requests: previousState.requests.filter(filterRequest => filterRequest.uuid !== request.uuid)
+            }
+        });
     }
 }
 
