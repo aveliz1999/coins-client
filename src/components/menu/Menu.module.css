@@ -50,6 +50,21 @@
     text-decoration: none;
 }
 
+.drawerLink {
+    display: flex;
+    align-items: center;
+    background: #cecece;
+    color: #fff;
+    cursor: pointer;
+    padding: 6px 10px;
+    text-decoration: none;
+    margin-bottom: 2px;
+}
+
+.drawerLink:hover {
+    background: #bababa;
+}
+
 .icon {
     margin-right: 25px;
     cursor: pointer;
@@ -59,6 +74,10 @@
 }
 
 .drawerIcon {
+    font-size: 30px;
+}
+
+.drawerOpenIcon {
     margin-top: 5px;
 }
 

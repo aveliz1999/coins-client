@@ -14,7 +14,7 @@ class Menu extends React.Component {
         return <div className={styles.menu}>
             <MediaQuery query={'(max-width: 1023px)'}>
                 <div className={styles.mobileMenu}>
-                    <i className={[styles.icon, styles.drawerIcon].join(' ')}
+                    <i className={[styles.icon, styles.drawerOpenIcon].join(' ')}
                        onClick={event => this.setState(previousState => {
                            return {openNavigationDrawer: !previousState.openNavigationDrawer}
                        })}
@@ -33,7 +33,16 @@ class Menu extends React.Component {
                 </div>
 
                 <div className={[styles.navigationDrawer, this.state.openNavigationDrawer ? styles.appear : ''].join(' ')}>
-
+                    <div>
+                        {
+                            this.props.links.map(link =>
+                                <Link to={link.link} className={styles.drawerLink}>
+                                    <i className={['material-icons', styles.drawerIcon].join(' ')}>{link.icon}</i>
+                                    {link.label}
+                                </Link>
+                            )
+                        }
+                    </div>
                 </div>
             </MediaQuery>
 
