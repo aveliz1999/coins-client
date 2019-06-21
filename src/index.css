@@ -3,6 +3,11 @@ html, body, #root {
   margin: 0;
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
 .fill-width {
   width: 100%
 }
