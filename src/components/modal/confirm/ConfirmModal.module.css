@@ -1,0 +1,32 @@
+.title {
+    font-size: 20pt;
+    margin-bottom: 10px;
+}
+
+.message {
+    font-size: 12pt;
+    margin-bottom: 10px;
+}
+
+.bottom {
+    min-width: 400px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.bottom > button {
+    min-height: 35px;
+    min-width: 75px;
+    font-size: 12pt;
+    border-radius: 10%;
+    color: #ffffff;
+    border: 1px solid #cccccc;
+}
+
+.confirm {
+    background-color: #2d89da;
+}
+
+.decline {
+    background-color: #FF3A19;
+}
