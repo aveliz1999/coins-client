@@ -10,6 +10,7 @@ import LoadingModal from "../modal/loading/LoadingModal";
 import RequestList from "../requestList/RequestList";
 import Tabs from "../tabs/Tabs";
 import ConfirmModal from "../modal/confirm/ConfirmModal";
+import UserInformationPanel from "../userInformationPanel/UserInformationPanel";
 
 class Home extends React.Component {
 
@@ -74,18 +75,9 @@ class Home extends React.Component {
                  </div>
             </div>
             <MediaQuery query='(min-width: 1024px)'>
-                <div className={styles.informationPanel}>
-                    { this.state.user &&
-                        <>
-                            <div className={styles.userInformation}>
-                                <img className={styles.userThumbnail} src={'/media/users/' + this.state.user.uuid + '/thumbnail.jpg'}/>
-                                <p className={styles.userName}>{this.state.user.name}</p>
-                            </div>
-                            <hr/>
-                        </>
-                    }
-                    <CoinsList coins={this.state.coins}/>
-                </div>
+                <UserInformationPanel user={this.state.user}
+                                      coins={this.state.coins}
+                />
             </MediaQuery>
             <MessageModal title={'Error'}
                           message={this.state.error}
