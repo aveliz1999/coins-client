@@ -2,15 +2,17 @@ import React from "react";
 import PropTypes from 'prop-types';
 import CoinsList from "../coinsList/CoinsList";
 import styles from './UserInformationPanel.module.css';
+import {connect} from "react-redux";
 
 class UserInformationPanel extends React.Component {
 
     render() {
         return <div className={styles.informationPanel}>
-            { this.props.user &&
+            {this.props.user &&
             <>
                 <div className={styles.userInformation}>
-                    <img className={styles.userThumbnail} src={'/media/users/' + this.props.user.uuid + '/thumbnail.jpg'}/>
+                    <img className={styles.userThumbnail}
+                         src={'/media/users/' + this.props.user.uuid + '/thumbnail.jpg'}/>
                     <p className={styles.userName}>{this.props.user.name}</p>
                 </div>
                 <hr/>
@@ -22,6 +24,10 @@ class UserInformationPanel extends React.Component {
 }
 
 UserInformationPanel.propTypes = {
+    /**
+     * The information of the current user.
+     * Passed by redux.
+     */
     user: PropTypes.shape({
         /**
          * User email
@@ -36,6 +42,10 @@ UserInformationPanel.propTypes = {
          */
         uuid: PropTypes.string.isRequired
     }).isRequired,
+    /**
+     * List of coins the user owns.
+     * Passed by redux.
+     */
     coins: PropTypes.arrayOf(PropTypes.shape({
         /**
          * Amount of the coin the user owns
@@ -56,4 +66,9 @@ UserInformationPanel.propTypes = {
     })).isRequired
 };
 
-export default UserInformationPanel;
+const mapStateToProps = state => ({
+    user: state.user,
+    coins: state.ownedCoins
+});
+
+export default connect(mapStateToProps)(UserInformationPanel);

@@ -7,6 +7,7 @@ import styles from './TransactionCreator.module.css';
 import CoinOption from "./option/CoinOption";
 import MessageModal from "../modal/message/MessageModal";
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 
 class TransactionCreator extends React.Component {
 
@@ -38,14 +39,16 @@ class TransactionCreator extends React.Component {
                 <SwitchButton toggleable={true} width={75} value={this.state.chargeValue} text='Charge'
                               secondaryText='Pay'
                               toggle={() => {
-                                  this.setState((previousState) => {return {chargeValue: !previousState.chargeValue}})
+                                  this.setState((previousState) => {
+                                      return {chargeValue: !previousState.chargeValue}
+                                  })
                               }}
                 />
                 <input readOnly className={styles.inputPrefix} style={{width: 64}} value='Receiver:'/>
                 <Select isClearable={true}
                         components={{Option: UserOption}}
                         onInputChange={(value) => {
-                            if(value !== '') {
+                            if (value !== '') {
                                 this.updateAutocomplete(value);
                             }
                         }}
@@ -64,7 +67,7 @@ class TransactionCreator extends React.Component {
                         onChange={selected => this.setState({'selectedUser': selected})}
                 />
             </div>
-            { this.state.selectedUser ?
+            {this.state.selectedUser ?
                 <>
                     <div className={styles.row}>
                         <input readOnly className={styles.inputPrefix} value='Amount:'/>
@@ -105,22 +108,31 @@ class TransactionCreator extends React.Component {
         </div>
     }
 
+    /**
+     * Update the autocomplete entries to display
+     * @param name The name the user is searching for currently
+     */
     async updateAutocomplete(name) {
-        try{
+        try {
             const result = (await axios.get('/api/users/search/' + name)).data;
-            const labeled = result.map(user => { return {...user, label: user.name, value: user.email}});
+            const labeled = result.map(user => {
+                return {...user, label: user.name, value: user.email}
+            });
             this.setState({autocompleteUsers: labeled});
-        }
-        catch(e) {
+        } catch (e) {
             this.error = 'An error occurred while retrieving user data'
         }
     }
 
+    /**
+     * Check the amount the user wants to make sure it's a valid number and then update it if it is
+     * @param value The value to be checked and set
+     */
     updateAmount(value) {
-        if(/^-?[0-9]*\.?[0-9]{0,2}$/.test(value)) {
-            if(value !== '') {
+        if (/^-?[0-9]*\.?[0-9]{0,2}$/.test(value)) {
+            if (value !== '') {
                 let number = parseFloat(value) * 100;
-                if(number > Number.MAX_SAFE_INTEGER || number < Number.MIN_SAFE_INTEGER) {
+                if (number > Number.MAX_SAFE_INTEGER || number < Number.MIN_SAFE_INTEGER) {
                     return;
                 }
             }
@@ -128,20 +140,19 @@ class TransactionCreator extends React.Component {
         }
     }
 
+    /**
+     * Check that the transaction parameters are valid and submit the transaction
+     */
     submit() {
-        if(!this.state.selectedCoin) {
+        if (!this.state.selectedCoin) {
             this.setState({error: 'Please select a coin'});
-        }
-        else if(!this.state.amount) {
+        } else if (!this.state.amount) {
             this.setState({error: 'Please specify an amount.'});
-        }
-        else if(!this.state.chargeValue && (parseFloat(this.state.amount) * 100) > this.state.selectedCoin.amount) {
+        } else if (!this.state.chargeValue && (parseFloat(this.state.amount) * 100) > this.state.selectedCoin.amount) {
             this.setState({error: 'You don\'t have enough to send that amount of coins.'});
-        }
-        else if(this.state.message.length > 64) {
+        } else if (this.state.message.length > 64) {
             this.setState({error: 'Messages can only contain up to 64 characters.'})
-        }
-        else{
+        } else {
             this.props.submit({
                 chargeValue: this.state.chargeValue,
                 receiver: this.state.selectedUser,
@@ -155,7 +166,8 @@ class TransactionCreator extends React.Component {
 
 TransactionCreator.propTypes = {
     /**
-     * List of coins that the user creating the transaction owns
+     * List of coins that the user creating the transaction owns.
+     * Passed by redux.
      */
     coins: PropTypes.arrayOf(PropTypes.shape({
         /**
@@ -181,4 +193,8 @@ TransactionCreator.propTypes = {
     submit: PropTypes.func.isRequired
 };
 
-export default TransactionCreator;
+const mapStateToProps = state => ({
+    coins: state.ownedCoins
+});
+
+export default connect(mapStateToProps)(TransactionCreator);

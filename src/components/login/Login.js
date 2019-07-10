@@ -1,10 +1,12 @@
 import React from "react";
 import styles from './Login.module.scss'
 import axios from 'axios';
-import {Redirect, Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import MessageModal from "../modal/message/MessageModal";
 import LoadingModal from "../modal/loading/LoadingModal";
-import PropTypes from 'prop-types';
+import {authenticate} from "../../actions/authenticationActions";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
 class Login extends React.Component {
 
@@ -18,13 +20,12 @@ class Login extends React.Component {
         email: '',
         password: '',
         responseError: undefined,
-        authenticated: false,
         loading: false
     };
 
     render() {
         // Go back to base page if the user is already logged in
-        if (this.state.authenticated) {
+        if (this.props.authenticated) {
             return <Redirect to='/' push/>
         }
         return <form ref={this.form} className={styles.container}>
@@ -69,6 +70,9 @@ class Login extends React.Component {
         </form>
     }
 
+    /**
+     * Attempt to log in with the given email and password
+     */
     async login() {
         try {
             // Enable the loading modal
@@ -82,7 +86,6 @@ class Login extends React.Component {
 
             // Updates the authenticated state in the application and redirect the user out of this page
             this.props.authenticate();
-            this.setState({authenticated: true});
         } catch (err) {
             // The server returned an error code
 
@@ -103,9 +106,18 @@ class Login extends React.Component {
 
 Login.propTypes = {
     /**
-     * Function to call when the user has successfully authenticated
+     * If the user is currently authenticated.
+     * Passed by redux.
      */
-    authenticate: PropTypes.func.isRequired
+    authenticated: PropTypes.bool
 };
 
-export default Login;
+const mapStateToProps = state => ({
+    authenticated: state.authenticated
+});
+
+const mapActionsToProps = {
+    authenticate: authenticate
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Login);

@@ -4,21 +4,20 @@ import axios from 'axios';
 import TransactionCreator from "../transactionCreator/TransactionCreator";
 import TransactionList from "../transactionList/TransactionList";
 import MediaQuery from 'react-responsive';
-import CoinsList from "../coinsList/CoinsList";
 import MessageModal from "../modal/message/MessageModal";
 import LoadingModal from "../modal/loading/LoadingModal";
 import RequestList from "../requestList/RequestList";
 import Tabs from "../tabs/Tabs";
 import ConfirmModal from "../modal/confirm/ConfirmModal";
 import UserInformationPanel from "../userInformationPanel/UserInformationPanel";
+import {addCoins} from "../../actions/ownedCoinsActions";
+import {connect} from "react-redux";
 
 class Home extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.updateUser = this.updateUser.bind(this);
-        this.updateCoins = this.updateCoins.bind(this);
         this.loadTransactions = this.loadTransactions.bind(this);
         this.loadRequests = this.loadRequests.bind(this);
         this.createTransaction = this.createTransaction.bind(this);
@@ -26,8 +25,6 @@ class Home extends React.Component {
     }
 
     state = {
-        user: undefined,
-        coins: [],
         creatingTransaction: false,
         transactions: [],
         loadingTransactions: false,
@@ -41,8 +38,6 @@ class Home extends React.Component {
     };
 
     componentDidMount() {
-        this.updateUser();
-        this.updateCoins();
         this.loadTransactions();
         this.loadRequests();
     }
@@ -53,26 +48,26 @@ class Home extends React.Component {
                 <TransactionCreator coins={this.state.coins}
                                     submit={this.createTransaction}
                 />
-                 <div className={styles.transactionsRequestsList}>
-                     <Tabs tabs={['Transactions', 'Requests']}>
-                         <TransactionList transactions={this.state.transactions}
-                                          updateTransactions={this.loadTransactions}
-                                          moreAvailable={this.state.transactionsAvailable}
-                                          loading={this.state.loadingTransactions}
-                         />
-                         <RequestList requests={this.state.requests}
-                                      updateRequests={this.loadRequests}
-                                      moreAvailable={this.state.requestsAvailable}
-                                      loading={this.state.loadingRequests}
-                                      acceptDeclineRequestCallback={(request, status) => {
-                                          this.setState({
-                                              workingRequest: request,
-                                              [status ? 'showConfirmAcceptRequest' : 'showConfirmDeclineRequest']: true
-                                          });
-                                      }}
-                         />
-                     </Tabs>
-                 </div>
+                <div className={styles.transactionsRequestsList}>
+                    <Tabs tabs={['Transactions', 'Requests']}>
+                        <TransactionList transactions={this.state.transactions}
+                                         updateTransactions={this.loadTransactions}
+                                         moreAvailable={this.state.transactionsAvailable}
+                                         loading={this.state.loadingTransactions}
+                        />
+                        <RequestList requests={this.state.requests}
+                                     updateRequests={this.loadRequests}
+                                     moreAvailable={this.state.requestsAvailable}
+                                     loading={this.state.loadingRequests}
+                                     acceptDeclineRequestCallback={(request, status) => {
+                                         this.setState({
+                                             workingRequest: request,
+                                             [status ? 'showConfirmAcceptRequest' : 'showConfirmDeclineRequest']: true
+                                         });
+                                     }}
+                        />
+                    </Tabs>
+                </div>
             </div>
             <MediaQuery query='(min-width: 1024px)'>
                 <UserInformationPanel user={this.state.user}
@@ -111,28 +106,14 @@ class Home extends React.Component {
     }
 
     /**
-     * Update the logged in user's information
-     */
-    async updateUser() {
-        try {
-            let user = (await axios.get('/api/users/')).data;
-            this.setState({user});
-        }
-        catch(e) {
-            this.setState({error: 'An error occurred while retrieving your user information.'});
-        }
-    }
-
-    /**
      * Update the list of the logged in user's coins
      */
     async updateCoins() {
         try {
             let coins = (await axios.get('/api/coins/')).data;
-            this.setState({coins});
-        }
-        catch(e) {
-            this.setState({error: 'An error occurred while retrieving your coins list.'});
+            this.props.updateCoins(coins)
+        } catch (e) {
+            this.setState({responseError: 'An error occurred while retrieving your coins list.'});
         }
     }
 
@@ -140,10 +121,10 @@ class Home extends React.Component {
      * Load more transactions, starting at the lastTransactionId variable in state
      */
     async loadTransactions(uuid = undefined) {
-        try{
+        try {
             this.setState({loadingTransactions: true});
 
-            if(!uuid && typeof(uuid) !== 'string') {
+            if (!uuid && typeof (uuid) !== 'string') {
                 uuid = (this.state.transactions[this.state.transactions.length - 1] || {}).uuid || '';
             }
             let existing = this.state.transactions.map(transaction => transaction.uuid);
@@ -158,8 +139,7 @@ class Home extends React.Component {
                 }),
                 transactionsAvailable: moreAvailable
             }));
-        }
-        catch(e) {
+        } catch (e) {
             this.setState({error: 'An error occurred while retrieving your transactions.'})
         }
         this.setState({loadingTransactions: false});
@@ -169,10 +149,10 @@ class Home extends React.Component {
      * Load more transactions, starting at the lastTransactionId variable in state
      */
     async loadRequests(uuid = undefined) {
-        try{
+        try {
             this.setState({loadingRequests: true});
 
-            if(!uuid && typeof(uuid) !== 'string') {
+            if (!uuid && typeof (uuid) !== 'string') {
                 uuid = (this.state.requests[this.state.requests.length - 1] || {}).uuid || ''
             }
             let existing = this.state.requests.map(request => request.uuid);
@@ -187,8 +167,7 @@ class Home extends React.Component {
                 }),
                 requestsAvailable: moreAvailable
             }));
-        }
-        catch(e) {
+        } catch (e) {
             this.setState({error: 'An error occurred while retrieving your requests.'})
         }
         this.setState({loadingRequests: false});
@@ -217,15 +196,14 @@ class Home extends React.Component {
                 message,
                 charging
             });
-        }
-        catch(e) {
+        } catch (e) {
             this.setState({error: 'An error occurred while creating your transaction.'})
         }
         this.setState({creatingTransaction: false});
 
-        this.updateCoins();
-        if(!charging) {
-            this.loadTransactions();
+        if (!charging) {
+            this.loadTransactions('');
+            this.updateCoins()
         }
     }
 
@@ -248,7 +226,6 @@ class Home extends React.Component {
             requestId: request.uuid
         });
 
-        this.updateCoins();
         this.loadTransactions('');
         this.setState(previousState => {
             return {
@@ -258,4 +235,8 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+const mapActionsToProps = {
+    updateCoins: addCoins
+};
+
+export default connect(undefined, mapActionsToProps)(Home);
