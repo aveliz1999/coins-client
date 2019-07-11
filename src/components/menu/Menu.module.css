@@ -48,6 +48,7 @@
     cursor: pointer;
     padding: 6px 10px;
     text-decoration: none;
+    margin-right: 8px;
 }
 
 .drawerLink {
@@ -125,4 +126,5 @@
     transition: transform 0.2s linear;
 }
 
-.appear{}
+.appear {
+}
