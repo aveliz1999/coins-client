@@ -1,22 +1,26 @@
 html, body, #root {
-  height: 100%;
-  margin: 0;
+    height: 100%;
+    margin: 0;
 }
 
 #root {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+}
+
+#root > :nth-child(n+2) {
+    margin-top: 45px;
 }
 
 .fill-width {
-  width: 100%
+    width: 100%
 }
 
 p, input, span, div, button, textarea {
-  font-family: 'Roboto', sans-serif;
-  font-size: 12pt;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12pt;
 }
 
 ::-moz-focus-inner {
-  border: none;
+    border: none;
 }
