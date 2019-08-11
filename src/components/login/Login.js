@@ -95,7 +95,7 @@ class Login extends React.Component {
             // Enable the error message modal
             const response = err.response;
             const code = response.status;
-            if (code === 500) {
+            if (code === 400) {
                 this.setState({responseError: 'Incorrect email or password. Please try again.'});
             } else {
                 this.setState({responseError: 'An error has occurred while logging in. Please try again.'});
