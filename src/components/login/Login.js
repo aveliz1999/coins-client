@@ -46,26 +46,28 @@ class Login extends React.Component {
                            event => this.setState({password: event.target.value})
                        }
                 />
-                <button
-                    onClick={event => {
-                        // Prevent the button submitting the form
-                        event.preventDefault();
+                <div className={styles.actions}>
+                    <button
+                        onClick={event => {
+                            // Prevent the button submitting the form
+                            event.preventDefault();
 
-                        // Check the email and password fields meet the requirements and attempt to log in if they do
-                        if (this.form.current.checkValidity()) {
-                            this.login();
-                        } else {
-                            this.form.current.reportValidity();
-                        }
-                    }}
-                >
-                    Log In
-                </button>
-                <Link to='/register'>
-                    <button className={styles.registerButton}>
-                        Register
+                            // Check the email and password fields meet the requirements and attempt to log in if they do
+                            if (this.form.current.checkValidity()) {
+                                this.login();
+                            } else {
+                                this.form.current.reportValidity();
+                            }
+                        }}
+                    >
+                        Log In
                     </button>
-                </Link>
+                    <Link to='/register'>
+                        <button>
+                            Register
+                        </button>
+                    </Link>
+                </div>
             </div>
         </form>
     }

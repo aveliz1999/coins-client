@@ -56,9 +56,9 @@ class Register extends React.Component {
                            event => {
                                const target = event.target;
                                target.setCustomValidity('');
-                               this.setState({password: target.value},() => {
+                               this.setState({password: target.value}, () => {
                                    // Set the password field error if it doesn't match the required pattern
-                                   if(target.validity.patternMismatch) {
+                                   if (target.validity.patternMismatch) {
                                        target.setCustomValidity('Passwords can only contain letters, numbers, spaces, and the following symbols: !"#$%&\'()*+,-./:;<=>?@[]^_`{|}~')
                                        target.reportValidity();
                                    }
@@ -73,7 +73,7 @@ class Register extends React.Component {
                                target.setCustomValidity('');
                                this.setState({confirmPassword: target.value}, () => {
                                    // Set the confirm password field error if the passwords don't match
-                                   if(this.state.password !== this.state.confirmPassword) {
+                                   if (this.state.password !== this.state.confirmPassword) {
                                        target.setCustomValidity('Passwords must be the same');
                                        target.reportValidity();
                                    }
@@ -81,25 +81,26 @@ class Register extends React.Component {
                            }
                        }
                 />
-                <button onClick={event => {
-                    // Prevent the button submitting the form
-                    event.preventDefault();
+                <div className={styles.actions}>
+                    <button onClick={event => {
+                        // Prevent the button submitting the form
+                        event.preventDefault();
 
-                    // Check if the form fields meet the requirements and attempt to register if they do
-                    if (this.form.current.checkValidity()) {
-                        this.register();
-                    }
-                    else{
-                        this.form.current.reportValidity();
-                    }
-                }}>
-                    Register
-                </button>
-                <Link to='/login'>
-                    <button className={styles.loginButton}>
-                        Back
+                        // Check if the form fields meet the requirements and attempt to register if they do
+                        if (this.form.current.checkValidity()) {
+                            this.register();
+                        } else {
+                            this.form.current.reportValidity();
+                        }
+                    }}>
+                        Register
                     </button>
-                </Link>
+                    <Link to='/login'>
+                        <button className={styles.loginButton}>
+                            Back
+                        </button>
+                    </Link>
+                </div>
             </div>
         </form>
     }
